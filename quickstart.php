@@ -1,10 +1,13 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-
 define('APPLICATION_NAME', 'Google Calendar API PHP Quickstart');
-define('CREDENTIALS_PATH', '~/.credentials/calendar-php-quickstart.json');
-define('CLIENT_SECRET_PATH', __DIR__ . '/client_secret.json');
+
+# EAM: WHAT'S THIS?
+# define('CREDENTIALS_PATH', '~/.credentials/calendar-php-quickstart.json');
+define('CREDENTIALS_PATH', '/Users/hmdcadministrator/Downloads/APIProject-a4722b82e133.json.FILE_DOES_NOT_EXIST');
+define('CLIENT_SECRET_PATH', '/Users/hmdcadministrator/php-oauth2-example/client_secret_631256725070-1voucmae0h2fs9ej0rc2hgol084lgead.apps.googleusercontent.com.json');
+
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-php-quickstart.json
 define('SCOPES', implode(' ', array(
@@ -20,19 +23,29 @@ if (php_sapi_name() != 'cli') {
  * @return Google_Client the authorized client object
  */
 function getClient() {
+
+  error_log("EAM Entering " . __FILE__ . ":" . __LINE__);
+
   $client = new Google_Client();
   $client->setApplicationName(APPLICATION_NAME);
   $client->setScopes(SCOPES);
   $client->setAuthConfig(CLIENT_SECRET_PATH);
   $client->setAccessType('offline');
+  $client->setRedirectUri('http://localhost:8080/alldone.php');
 
   // Load previously authorized credentials from a file.
   $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
   if (file_exists($credentialsPath)) {
+
+    error_log("EAM Entering " . __FILE__ . ":" . __LINE__);
+
     $accessToken = json_decode(file_get_contents($credentialsPath), true);
   } else {
+
+    error_log("EAM Entering " . __FILE__ . ":" . __LINE__);
+
     // Request authorization from the user.
-    $authUrl = $client->createAuthUrl();
+    $authUrl = $client->createAuthUrl(SCOPES);
     printf("Open the following link in your browser:\n%s\n", $authUrl);
     print 'Enter verification code: ';
     $authCode = trim(fgets(STDIN));
