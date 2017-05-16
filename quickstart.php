@@ -84,7 +84,7 @@ function expandHomeDirectory($path) {
 
 // Get the API client and construct the service object.
 $client = getClient();
- $client->setRedirectUri($redirectUri);
+$client->setRedirectUri($redirectUri);
 $service = new Google_Service_Calendar($client);
 
 // Print the next 10 events on the user's calendar.
@@ -95,7 +95,25 @@ $optParams = array(
   'singleEvents' => TRUE,
   'timeMin' => date('c'),
 );
-$results = $service->events->listEvents($calendarId, $optParams);
+
+# $results = $service->events->listEvents($calendarId, $optParams);
+$calendarService = new Google_Service_Calendar($client);
+$calendar_calendar = new Google_Service_Calendar_Calendar();
+$calendar_calendar->setDescription("EAM 1002 Description");
+$calendar_calendar->setSummary("EAM 1002 Summary");
+$calendar = $calendarService->calendars->insert($calendar_calendar);
+
+$event = new Google_Service_Calendar_Event();
+
+$dt1 = new DateTime("2017-05-16 05:00:00");
+$dt2 = new DateTime("2017-05-16 07:00:00");
+$calendarDateTime = new Google_Service_Calendar_EventDateTime();
+$calendarDateTime->setDateTime($dt1->format(DateTime::RFC3339));
+$event->setStart($calendarDateTime);
+$calendarDateTime->setDateTime($dt2->format(DateTime::RFC3339));
+$event->setEnd($calendarDateTime);
+$event->setDescription("Felipe's tacos");
+$calendarService->events->insert($calendar->getId(), $event);
 
 if (count($results->getItems()) == 0) {
   print "No upcoming events found.\n";
