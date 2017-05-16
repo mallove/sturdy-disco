@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 define('APPLICATION_NAME', 'Google Calendar API PHP Quickstart');
@@ -28,29 +29,20 @@ if (php_sapi_name() != 'cli') {
  * @return Google_Client the authorized client object
  */
 function getClient() {
-
-  error_log("EAM Entering " . __FILE__ . ":" . __LINE__);
-
   $client = new Google_Client();
   $client->setApplicationName(APPLICATION_NAME);
   $client->setScopes(SCOPES);
   $client->setAuthConfig(CLIENT_SECRET_PATH);
   $client->setAccessType('offline');
-$redirectUri = 'https://oauth-redirect.googleusercontent.com/r/core-stronghold-491';
+  $redirectUri = 'https://oauth-redirect.googleusercontent.com/r/core-stronghold-491';
   $client->setState('1');
   $client->setRedirectUri($redirectUri);
 
   // Load previously authorized credentials from a file.
   $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
   if (file_exists($credentialsPath)) {
-
-    error_log("EAM Entering " . __FILE__ . ":" . __LINE__);
-
     $accessToken = json_decode(file_get_contents($credentialsPath), true);
   } else {
-
-    error_log("EAM Entering " . __FILE__ . ":" . __LINE__);
-
     // Request authorization from the user.
     $authUrl = $client->createAuthUrl(SCOPES);
     printf("Open the following link in your browser:\n%s\n", $authUrl);
