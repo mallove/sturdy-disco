@@ -11,8 +11,13 @@ define('CLIENT_SECRET_PATH', '/Users/hmdcadministrator/php-oauth2-example/client
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-php-quickstart.json
 define('SCOPES', implode(' ', array(
-  Google_Service_Calendar::CALENDAR_READONLY)
+  Google_Service_Calendar::CALENDAR )
 ));
+
+
+# $redirectUri = 'http://localhost:8080/alldone.php';
+$redirectUri = 'https://oauth-redirect.googleusercontent.com/r/core-stronghold-491';
+
 
 if (php_sapi_name() != 'cli') {
   throw new Exception('This application must be run on the command line.');
@@ -31,7 +36,9 @@ function getClient() {
   $client->setScopes(SCOPES);
   $client->setAuthConfig(CLIENT_SECRET_PATH);
   $client->setAccessType('offline');
-  $client->setRedirectUri('http://localhost:8080/alldone.php');
+$redirectUri = 'https://oauth-redirect.googleusercontent.com/r/core-stronghold-491';
+  $client->setState('1');
+  $client->setRedirectUri($redirectUri);
 
   // Load previously authorized credentials from a file.
   $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
@@ -85,6 +92,7 @@ function expandHomeDirectory($path) {
 
 // Get the API client and construct the service object.
 $client = getClient();
+ $client->setRedirectUri($redirectUri);
 $service = new Google_Service_Calendar($client);
 
 // Print the next 10 events on the user's calendar.

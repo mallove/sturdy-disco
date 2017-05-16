@@ -6,7 +6,13 @@ session_start();
 
 $client = new Google_Client();
 $client->setAuthConfigFile('client_secret_631256725070-1voucmae0h2fs9ej0rc2hgol084lgead.apps.googleusercontent.com.json');
-$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
+
+# redirect uri
+# $redirectUri = 'http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
+// Source: https://console.developers.google.com/iam-admin/settings/project?project=core-stronghold-491
+$redirectUri = 'https://oauth-redirect.googleusercontent.com/r/core-stronghold-491';
+$client->setRedirectUri($redirectUri);
+
 #$client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
 $client->addScope(Google_Service_Calendar::CALENDAR);
 
@@ -18,7 +24,7 @@ if (! isset($_GET['code'])) {
   error_log("EAM Entering " . __FILE__ . ":" . __LINE__);
   error_log("EAM \$_SESSION = " . var_export($_SESSION, true));
 
-  $auth_url = $client->createAuthUrl();
+  $auth_url = $client->createAuthUrl(SCOPES);
   header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
 
 } else {
