@@ -83,7 +83,6 @@ function expandHomeDirectory($path) {
 // Get the API client and construct the service object.
 $client = getClient();
 $client->setRedirectUri($redirectUri);
-$calendarList = $service->calendarList;
 
 // Print the next 10 events on the user's calendar.
 $calendarId = 'primary';
